@@ -1,0 +1,50 @@
+# GLOBAL CONFIGURATION
+spring:
+    # if you want to set a different profile
+    # use environment variable:
+    #
+    # SPRING_PROFILES_ACTIVE=docker
+     # DB: enable web console
+    profiles.active: local
+    application.name: lhm_user_service
+        
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG        
+
+---
+# DOCKER CONFIGURATION
+spring:
+    profiles: docker
+
+# inside a container, we can always map to 8080. Use your compose
+# file to expose a service on a different port.
+server.port: 8080
+
+
+---
+# LOCAL CONFIGURATION
+spring:
+    profiles: local
+    
+# random server port to avoid port 
+# conflicts on localhost
+# server.port: 0
+# dedicated server port
+server.port: 8870
+        
+security:
+  basic:
+    enabled: false
+  oauth2:
+    client:
+    resource:
+      userInfoUri: http://localhost:8080/auth/realms/demo/protocol/openid-connect/userinfo 
+    #added for Entitlements API
+    entitlements:
+      entitlementsUri: http://localhost:8080/auth/realms/demo/authz/entitlement/openIdDemo      
+    #added for UMA
+    uma:
+      permissionUri: http://localhost:8080/auth/realms/demo/authz/protection/permission
+      authorizeUri: http://localhost:8080/auth/realms/demo/authz/authorize        
