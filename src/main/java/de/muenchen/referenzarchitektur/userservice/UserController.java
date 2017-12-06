@@ -3,6 +3,7 @@ package de.muenchen.referenzarchitektur.userservice;
 import de.muenchen.referenzarchitektur.authorisationLib.EntitlementsService;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.logging.Logger;
@@ -38,10 +39,18 @@ public class UserController {
 
     @RequestMapping(value = "/getPermissionsDummy", method = RequestMethod.GET)
     public Set<String> getPermissionsDummy() {
+        LOG.info("Called getPermissionsDummy");
         Set<String> permissions = new HashSet<String>();
+        permissions.add("RESOURCE3");
         permissions.add("RESOURCE2");
         permissions.add("RESOURCE1");
         permissions.add("Default Resource");
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        LOG.info("Returning getPermissionsDummy");
         return permissions;
     }
 
