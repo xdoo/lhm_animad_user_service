@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author rowe42
  */
 @SpringBootApplication
-//@EnableResourceServer
+@EnableResourceServer
 @EnableDiscoveryClient
 @ComponentScan("de.muenchen.referenzarchitektur.authorisationLib, de.muenchen.referenzarchitektur.userservice")
 public class UserServiceApplication {
@@ -22,8 +22,8 @@ public class UserServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);
     }
-    
-        @Bean
+
+    @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurerAdapter() {
             @Override
@@ -31,6 +31,6 @@ public class UserServiceApplication {
                 registry.addMapping("/**").allowedOrigins("http://localhost:8081");
             }
         };
-    }  
+    }
 
 }

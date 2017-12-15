@@ -38,13 +38,10 @@ security:
   basic:
     enabled: false
   oauth2:
-    client:
-    resource:
-      userInfoUri: http://localhost:8080/auth/realms/demo/protocol/openid-connect/userinfo 
+    #this part not needed when validating the JWT with the public key
+#    client:
+#    resource:
+#      userInfoUri: http://localhost:8080/auth/realms/demo/protocol/openid-connect/userinfo 
     #added for Entitlements API
     entitlements:
-      entitlementsUri: http://localhost:8080/auth/realms/demo/authz/entitlement/openIdDemo      
-    #added for UMA
-    uma:
-      permissionUri: http://localhost:8080/auth/realms/demo/authz/protection/permission
-      authorizeUri: http://localhost:8080/auth/realms/demo/authz/authorize        
+      entitlementsUri: http://localhost:8080/auth/realms/demo/authz/entitlement/openIdDemo    
