@@ -35,13 +35,15 @@ spring:
 server.port: 8870
         
 security:
-  basic:
-    enabled: false
+  ignored: /**    
+#  basic:
+#    enabled: false
   oauth2:
+    #added for Entitlements API
+    entitlements:
+      entitlementsUri: http://localhost:8080/auth/realms/demo/authz/entitlement/openIdDemo    
+
     #this part not needed when validating the JWT with the public key
 #    client:
 #    resource:
 #      userInfoUri: http://localhost:8080/auth/realms/demo/protocol/openid-connect/userinfo 
-    #added for Entitlements API
-    entitlements:
-      entitlementsUri: http://localhost:8080/auth/realms/demo/authz/entitlement/openIdDemo    
