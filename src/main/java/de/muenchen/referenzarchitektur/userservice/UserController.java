@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.logging.Logger;
 import org.springframework.hateoas.Link;
-import static org.springframework.hateoas.jaxrs.JaxRsLinkBuilder.linkTo;
-import org.springframework.http.HttpEntity;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -71,5 +70,8 @@ public class UserController {
 //        return permissionsResource;
         return new ResponseEntity<PermissionsResource>(permissionsResource, HttpStatus.FOUND);
     }
+    
+    
+
 
 }
