@@ -34,14 +34,19 @@ spring:
 # dedicated server port
 server.port: 8870
         
+
 security:
-  ignored: /**    
-#  basic:
-#    enabled: false
+  basic:
+    enabled: false
   oauth2:
-    #added for Entitlements API
     entitlements:
       entitlementsUri: http://localhost:8080/auth/realms/demo/authz/entitlement/openIdDemo    
+    resource:
+      filter-order: 3
+      jwt:
+        key-value: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgVRpaNU0MgP7zSpGC4i0YHuUVuS3iU9RGgvUdUxJNpaNHUVAaPUjOwWseWpjgZrQqlpUm/DA0wE7f5TrwH+cCPabUTRhE0LYOyL/Y5C3ZKezQM6/3EDtIptafixbTpjvvEAJBSSFu1tlTwruePWe6GQEm0euzUWwqLRTRV2eHbwg+KTJFY8401u1nf4nBs5F2pS8uGIuGed/yz6+Nw+fgykoQ8Khqp4NKg0yC7h8Bpj8O/PBSROsKYp5ociZcEnAaKAoCA3jWmgfX+PVYym70ktPEr78KBLNVPGF7mV21BIdXbgqyKa5h5M6SCqEgqusBIjkTQmcUN9C7ZL4ea+fTQIDAQAB
+    client:
+      client-id: openIdDemo
 
     #this part not needed when validating the JWT with the public key
 #    client:
