@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
@@ -24,6 +25,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @Configuration
 @EnableResourceServer
 @EnableOAuth2Client
+@Profile("!no-security")
 public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     private static final Logger LOG = Logger.getLogger(OAuth2ResourceServerConfig.class.getName());

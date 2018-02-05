@@ -40,7 +40,7 @@ security:
     enabled: false
   oauth2:
     entitlements:
-      entitlementsUri: http://localhost:8080/auth/realms/demo/authz/entitlement/openIdDemo    
+      entitlementsUri: http://localhost:4000/auth/realms/demo/authz/entitlement/openIdDemo    
     resource:
       filter-order: 3
       jwt:
@@ -52,3 +52,10 @@ security:
 #    client:
 #    resource:
 #      userInfoUri: http://localhost:8080/auth/realms/demo/protocol/openid-connect/userinfo 
+
+---
+spring:
+    profiles: no-security
+
+server.port: 8870
+security.ignored: /**
