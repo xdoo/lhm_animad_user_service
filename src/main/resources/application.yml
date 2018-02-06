@@ -11,7 +11,8 @@ spring:
 logging:
   level:
     org.springframework.security: DEBUG
-    org.springframework.web: DEBUG        
+    org.springframework.web: DEBUG
+    de.muenchen.referenzarchitektur: DEBUG
 
 ---
 # DOCKER CONFIGURATION
@@ -40,11 +41,11 @@ security:
     enabled: false
   oauth2:
     entitlements:
-      entitlementsUri: http://localhost:4000/auth/realms/demo/authz/entitlement/openIdDemo    
+      entitlementsUri: http://localhost:8080/auth/realms/demo/authz/entitlement/openIdDemo    
     resource:
       filter-order: 3
       jwt:
-        key-value: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgVRpaNU0MgP7zSpGC4i0YHuUVuS3iU9RGgvUdUxJNpaNHUVAaPUjOwWseWpjgZrQqlpUm/DA0wE7f5TrwH+cCPabUTRhE0LYOyL/Y5C3ZKezQM6/3EDtIptafixbTpjvvEAJBSSFu1tlTwruePWe6GQEm0euzUWwqLRTRV2eHbwg+KTJFY8401u1nf4nBs5F2pS8uGIuGed/yz6+Nw+fgykoQ8Khqp4NKg0yC7h8Bpj8O/PBSROsKYp5ociZcEnAaKAoCA3jWmgfX+PVYym70ktPEr78KBLNVPGF7mV21BIdXbgqyKa5h5M6SCqEgqusBIjkTQmcUN9C7ZL4ea+fTQIDAQAB
+        key-value: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqjrVO6S3X8U79FSJgY/zKBvEe+YOYAVRnjeaZLaFs66Amglf1RLp1G2ZANCtEV35uPOWi3ErkQDvGEOn0BNlgxYFI6iPO2co6RnPIRNEIhp7uvw9mxevXmIcRfv0/bulus81ET7H/POYqYpr7zXaN1EQU5nhjsSF39AHC5Xp49Fve8fihtWu63JOd/WnlkxJ+esxl+q+Wx1wBKdY8eaIxrKs3REZV0wxrSq7qwBEgAJ5HAojz3SO/A6s4K/J0Fm1WCxsnkm9LJ+gtnfDltYoJDbZafQyifT45oHz0pApIScqbsvgriOjQxSrQ7XzUx9btMxoKdPHrjlTukGweInqlQIDAQAB
     client:
       client-id: openIdDemo
 

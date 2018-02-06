@@ -67,11 +67,18 @@ public class NoSecurityController {
     public ResponseEntity<PermissionsResource> getPermissionsMock() {
         LOG.info("Called permissionsMock");
         Set<String> permissions = new HashSet<>();
-        permissions.add("RESOURCE3");
-        permissions.add("RESOURCE2");
-        permissions.add("RESOURCE1");
-        permissions.add("Default Resource");
+        permissions.add("administration_READ_Animal");
+        permissions.add("administration_READ_Keeper");
+        permissions.add("administration_READ_Enclosure");
+        permissions.add("administration_WRITE_Animal");
+        permissions.add("administration_WRITE_Enclosure");
+        permissions.add("administration_WRITE_Keeper");
+        permissions.add("administration_DELETE_Animal");
+        permissions.add("administration_DELETE_Enclosure");
+        permissions.add("administration_DELETE_Keeper");
+        permissions.add("administration_BUSINESSACTION_CreateAppointment");
 
+    
         try {
             Thread.sleep(3000);
         } catch (InterruptedException ex) {
