@@ -11,7 +11,8 @@ spring:
 logging:
   level:
     org.springframework.security: DEBUG
-    org.springframework.web: DEBUG        
+    org.springframework.web: DEBUG
+    de.muenchen.referenzarchitektur: DEBUG
 
 ---
 # DOCKER CONFIGURATION
@@ -34,14 +35,28 @@ spring:
 # dedicated server port
 server.port: 8870
         
+
 security:
   basic:
     enabled: false
   oauth2:
+    entitlements:
+      entitlementsUri: http://localhost:8080/auth/realms/demo/authz/entitlement/openIdDemo    
+    resource:
+      filter-order: 3
+      jwt:
+        key-value: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqjrVO6S3X8U79FSJgY/zKBvEe+YOYAVRnjeaZLaFs66Amglf1RLp1G2ZANCtEV35uPOWi3ErkQDvGEOn0BNlgxYFI6iPO2co6RnPIRNEIhp7uvw9mxevXmIcRfv0/bulus81ET7H/POYqYpr7zXaN1EQU5nhjsSF39AHC5Xp49Fve8fihtWu63JOd/WnlkxJ+esxl+q+Wx1wBKdY8eaIxrKs3REZV0wxrSq7qwBEgAJ5HAojz3SO/A6s4K/J0Fm1WCxsnkm9LJ+gtnfDltYoJDbZafQyifT45oHz0pApIScqbsvgriOjQxSrQ7XzUx9btMxoKdPHrjlTukGweInqlQIDAQAB
+    client:
+      client-id: openIdDemo
+
     #this part not needed when validating the JWT with the public key
 #    client:
 #    resource:
 #      userInfoUri: http://localhost:8080/auth/realms/demo/protocol/openid-connect/userinfo 
-    #added for Entitlements API
-    entitlements:
-      entitlementsUri: http://localhost:8080/auth/realms/demo/authz/entitlement/openIdDemo    
+
+---
+spring:
+    profiles: no-security
+
+server.port: 8870
+security.ignored: /**
