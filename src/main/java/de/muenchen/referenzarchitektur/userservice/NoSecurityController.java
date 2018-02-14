@@ -63,7 +63,7 @@ public class NoSecurityController {
 
 
     @CrossOrigin(origins = "http://127.0.0.1:8081")
-    @RequestMapping(value = "/permissionsMock", method = RequestMethod.GET)
+    @RequestMapping(value = "/permissions", method = RequestMethod.GET)
     public ResponseEntity<PermissionsResource> getPermissionsMock() {
         LOG.info("Called permissionsMock");
         Set<String> permissions = new HashSet<>();
@@ -85,7 +85,7 @@ public class NoSecurityController {
             Logger.getLogger(NoSecurityController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return generatePermissionsResponse(permissions, "permissionsMock");
+        return generatePermissionsResponse(permissions, "permissions");
     }
 
     private ResponseEntity<PermissionsResource> generatePermissionsResponse(Set<String> permissions, String self) {
