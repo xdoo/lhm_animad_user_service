@@ -22,6 +22,7 @@ import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 /**
  *
@@ -57,9 +58,13 @@ public class EntitlementsService {
             rpt = retrieveRPTviaEntitlements();
         }
 
-        Set<String> permissionsSet = extractPermissionsFromRPT(rpt);
-
-        LOG.fine("Permissions retrieved from KeyCloak: " + permissionsSet.toString());
+        Set<String> permissionsSet;
+        if (rpt != null) {
+            permissionsSet = extractPermissionsFromRPT(rpt);
+            LOG.fine("Permissions retrieved from KeyCloak: " + permissionsSet.toString());
+        } else {
+            permissionsSet = new HashSet<>();
+        }
 
         return permissionsSet;
     }
@@ -74,12 +79,18 @@ public class EntitlementsService {
     private String retrieveRPTviaEntitlements() {
         LOG.fine("Called retrieveRPTviaEntitlements");
 
-        String response = oauth2RestTemplate.getForObject(authUrl, String.class);
+        String rpt = null;
+        
+        try {
+            String response = oauth2RestTemplate.getForObject(authUrl, String.class);
+            JSONObject responseJSON = new JSONObject(response);
 
-        JSONObject responseJSON = new JSONObject(response);
+            rpt = responseJSON.getString("rpt");
+            LOG.fine("Got this RPT: " + rpt);
+        } catch (HttpClientErrorException e) {
+            LOG.severe("Error while calling KeyCloak for Entitlements. Status Code: " + e.getStatusText());
+        }
 
-        String rpt = responseJSON.getString("rpt");
-        LOG.fine("Got this RPT: " + rpt);
         return rpt;
     }
 
@@ -98,6 +109,7 @@ public class EntitlementsService {
         String token = details.getTokenValue();
         AuthzClient authzClient = AuthzClient.create();
 
+        //TODO hier auch ein Try-Catch einbauen falls KeyCloak nicht erreichbar (wie oben)
         EntitlementResponse response = authzClient.entitlement(token)
                 .getAll("openIdDemo");
         String rpt = response.getRpt();
