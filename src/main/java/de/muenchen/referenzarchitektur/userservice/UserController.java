@@ -17,6 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
@@ -58,6 +59,16 @@ public class UserController {
         String response = responseEntity.getBody();
 
         return "Success! (" + response + ")";
+    }
+    
+    /**
+     * Testmethode, um die ans Backend übergebenen Headers anzuzeigen.
+     * @param headers
+     * @return 
+     */
+    @RequestMapping(value = "/headers", method = RequestMethod.GET)
+    public String showHeaders(@RequestHeader HttpHeaders headers) {
+        return headers.toString();
     }
 
 
