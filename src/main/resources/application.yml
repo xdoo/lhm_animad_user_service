@@ -6,14 +6,8 @@ spring:
     # SPRING_PROFILES_ACTIVE=docker
      # DB: enable web console
     profiles.active: local
-    application.name: lhm_user_service
+    application.name: user-service
         
-logging:
-  level:
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-    de.muenchen.referenzarchitektur: DEBUG
-
 ---
 # DOCKER CONFIGURATION
 spring:
@@ -29,10 +23,12 @@ server.port: 8080
 spring:
     profiles: local
     
-# random server port to avoid port 
-# conflicts on localhost
-# server.port: 0
-# dedicated server port
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    de.muenchen.referenzarchitektur: DEBUG
+    
 server.port: 8870
         
 
@@ -45,18 +41,22 @@ security:
     resource:
       filter-order: 3
       jwt:
-        key-value: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqjrVO6S3X8U79FSJgY/zKBvEe+YOYAVRnjeaZLaFs66Amglf1RLp1G2ZANCtEV35uPOWi3ErkQDvGEOn0BNlgxYFI6iPO2co6RnPIRNEIhp7uvw9mxevXmIcRfv0/bulus81ET7H/POYqYpr7zXaN1EQU5nhjsSF39AHC5Xp49Fve8fihtWu63JOd/WnlkxJ+esxl+q+Wx1wBKdY8eaIxrKs3REZV0wxrSq7qwBEgAJ5HAojz3SO/A6s4K/J0Fm1WCxsnkm9LJ+gtnfDltYoJDbZafQyifT45oHz0pApIScqbsvgriOjQxSrQ7XzUx9btMxoKdPHrjlTukGweInqlQIDAQAB
+        key-value: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlsteeVtC+LlM/uhuusceFDvKbeCPolBEpq+rNnRbBvSPDCdKGcIIpjrQswX/58loE/bQ45A5IY1Tlm1MWbGxZ0IZhYaILeTNySTK3aRsV94OpN+ib/PGWkP1aQZ6wdm4//C6whOhCbulbLwSTyjByD72FGdaO/OhrATD9OAEcP0QmrvjLRHQBA80lxB4fRCyIrea9aL/AuvBsAbTz1Ub70rH8ydwaPtev7/L4dY+9NaqoL23pLIYyV7k3cuPeyHU/lt4I68R4rNiFv08zQFWGMr+li13cWNi9KsNfP5h6Ce7h+D2WmOUv7Tm9b8rAJ4jGHuf8ylHWt0SQxBtofuldwIDAQAB
     client:
       client-id: openIdDemo
 
-    #this part not needed when validating the JWT with the public key
-#    client:
-#    resource:
-#      userInfoUri: http://localhost:8080/auth/realms/demo/protocol/openid-connect/userinfo 
 
 ---
+# NO-SECURITY CONFIGURATION
 spring:
     profiles: no-security
 
-server.port: 8870
 security.ignored: /**
+server.port: 8870
+
+---
+# OPENSHIFT CONFIGURATION
+spring:
+    profiles: openshift
+
+server.port: 8080
