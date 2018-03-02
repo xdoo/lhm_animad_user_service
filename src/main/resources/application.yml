@@ -8,12 +8,6 @@ spring:
     profiles.active: local
     application.name: user-service
         
-logging:
-  level:
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-    de.muenchen.referenzarchitektur: DEBUG
-
 ---
 # DOCKER CONFIGURATION
 spring:
@@ -29,10 +23,12 @@ server.port: 8080
 spring:
     profiles: local
     
-# random server port to avoid port 
-# conflicts on localhost
-# server.port: 0
-# dedicated server port
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    de.muenchen.referenzarchitektur: DEBUG
+    
 server.port: 8870
         
 
@@ -49,14 +45,18 @@ security:
     client:
       client-id: openIdDemo
 
-    #this part not needed when validating the JWT with the public key
-#    client:
-#    resource:
-#      userInfoUri: http://localhost:8080/auth/realms/demo/protocol/openid-connect/userinfo 
 
 ---
+# NO-SECURITY CONFIGURATION
 spring:
     profiles: no-security
 
-server.port: 8080
 security.ignored: /**
+server.port: 8870
+
+---
+# OPENSHIFT CONFIGURATION
+spring:
+    profiles: openshift
+
+server.port: 8080
