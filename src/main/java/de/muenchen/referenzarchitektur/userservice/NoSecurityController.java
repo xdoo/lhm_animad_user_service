@@ -4,10 +4,13 @@ import de.muenchen.referenzarchitektur.userservice.domain.PermissionsResource;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import java.util.logging.Logger;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.rest.webmvc.BasePathAwareController;
+import org.springframework.data.rest.webmvc.RepositoryLinksResource;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.ResourceProcessor;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +21,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
  *
  * @author rowe42
  */
-@RestController
+@BasePathAwareController
 @Profile("no-security")
-public class NoSecurityController {
+@RequestMapping(value = "/permissions")
+public class NoSecurityController implements
+        ResourceProcessor<RepositoryLinksResource> {
 
     private static final Logger LOG = Logger.getLogger(NoSecurityController.class.getName());
 
 
     @CrossOrigin(origins = "http://127.0.0.1:8081")
-    @RequestMapping(value = "/permissions", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PermissionsResource> getPermissionsMock() {
         LOG.info("Called permissionsMock");
         Set<String> permissions = new HashSet<>();
@@ -68,6 +73,13 @@ public class NoSecurityController {
         permissionsResource.add(link);
 
         return new ResponseEntity<>(permissionsResource, HttpStatus.OK);
+    }
+
+    
+    @Override
+    public RepositoryLinksResource process(RepositoryLinksResource resource) {
+        resource.add(ControllerLinkBuilder.linkTo(NoSecurityController.class).withRel("permissions"));
+        return resource;
     }
 
 }
