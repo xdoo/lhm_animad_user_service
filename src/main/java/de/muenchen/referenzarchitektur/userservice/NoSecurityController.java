@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.logging.Logger;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.rest.webmvc.RepositoryLinksResource;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.ResourceProcessor;
+import org.springframework.hateoas.ResourceSupport;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +23,27 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @RestController
 @Profile("no-security")
-public class NoSecurityController {
+public class NoSecurityController implements ResourceProcessor<RepositoryLinksResource> {
 
     private static final Logger LOG = Logger.getLogger(NoSecurityController.class.getName());
 
+    class LinksResource extends ResourceSupport {
+
+        public LinksResource() {
+        }
+    }
+
+    /**
+     * This method adds the link to /businessActions to the REST-startpoint.
+     *
+     * @param repositoryLinksResource
+     * @return
+     */
+    @Override
+    public RepositoryLinksResource process(RepositoryLinksResource repositoryLinksResource) {
+        repositoryLinksResource.add(linkTo(UserController.class).withRel("permissions"));
+        return repositoryLinksResource;
+    }
 
     @CrossOrigin(origins = "http://127.0.0.1:8081")
     @RequestMapping(value = "/permissions", method = RequestMethod.GET)
@@ -53,7 +73,6 @@ public class NoSecurityController {
 //        } catch (InterruptedException ex) {
 //            Logger.getLogger(NoSecurityController.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-
         return generatePermissionsResponse(permissions, "permissions");
     }
 
