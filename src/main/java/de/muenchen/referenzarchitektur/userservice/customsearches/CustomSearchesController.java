@@ -11,7 +11,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
@@ -28,11 +27,6 @@ import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.ResourceProcessor;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.jwt.Jwt;
-import org.springframework.security.jwt.JwtHelper;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.hateoas.ResourceSupport;
@@ -50,9 +44,12 @@ public class CustomSearchesController implements ResourceProcessor<RepositoryLin
 
     private static final int MAX_SEARCHES = 5;
     private CustomSearchesRepository customSearchesRepository;
+    private CustomSearchesHelper customSearchesHelper;
 
-    public CustomSearchesController(CustomSearchesRepository customSearchesRepository) {
+    public CustomSearchesController(CustomSearchesRepository customSearchesRepository,
+        CustomSearchesHelper customSearchesHelper) {
         this.customSearchesRepository = customSearchesRepository;
+        this.customSearchesHelper = customSearchesHelper;
     }
 
     class LinksResource extends ResourceSupport {
@@ -116,7 +113,7 @@ public class CustomSearchesController implements ResourceProcessor<RepositoryLin
     @ResponseStatus(HttpStatus.CREATED)
     @Transactional
     public void replaceOldestSearch(PersistentEntityResourceAssembler assembler, @RequestBody CustomSearch customSearch) throws UsernameNotFoundException {
-        String userName = getUsernameFromSession();
+        String userName = customSearchesHelper.getUsernameFromSession();
         int count = customSearchesRepository.countByUserNameAndComponentName(userName, customSearch.getComponentName());
         if (count >= MAX_SEARCHES) {
             CustomSearch searchToDelete = customSearchesRepository.findFirstByUserNameAndComponentNameOrderByLastUpdated(userName, customSearch.getComponentName());
@@ -131,7 +128,7 @@ public class CustomSearchesController implements ResourceProcessor<RepositoryLin
     @RequestMapping(method = RequestMethod.GET, value = "/searchesForCurrentUser")
     @ResponseBody
     public ResponseEntity<?> findSearchesPerUser(PersistentEntityResourceAssembler assembler, @Param("componentName") String componentName) throws UsernameNotFoundException, ParameterMissingException {
-        String userName = getUsernameFromSession();
+        String userName = customSearchesHelper.getUsernameFromSession();
         if (componentName == null) {
             throw new ParameterMissingException("Query parameter componentName required.");
         }
@@ -139,32 +136,5 @@ public class CustomSearchesController implements ResourceProcessor<RepositoryLin
         return new ResponseEntity<>(customSearches, HttpStatus.OK);
     }
 
-    private String getUsernameFromSession() throws UsernameNotFoundException {
-        Authentication a = SecurityContextHolder.getContext().getAuthentication();
-        OAuth2AuthenticationDetails details = (OAuth2AuthenticationDetails) a.getDetails();
-        String token = details.getTokenValue();
-        if (token == null) {
-            LOG.error("No token found in Security Context!");
-            throw new UsernameNotFoundException("No token found in Security Context!");
-        }
-        Jwt jwt = JwtHelper.decode(token);
 
-        String preferredUsername = null;
-        if (jwt != null) {
-            String claims = jwt.getClaims();
-            if (claims != null) {
-                JSONObject json = new JSONObject(claims);
-                preferredUsername = json.get("preferred_username").toString();
-            } else {
-                LOG.error("No claims found for token " + token);
-            }
-        }
-
-        if (preferredUsername == null) {
-            LOG.error("No preferred_username found for token " + token);
-            throw new UsernameNotFoundException("No preferred_username found in token.");
-        }
-
-        return preferredUsername;
-    }
 }
