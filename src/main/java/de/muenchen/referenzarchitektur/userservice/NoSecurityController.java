@@ -30,16 +30,16 @@ public class NoSecurityController {
     public ResponseEntity<PermissionsResource> getPermissionsMock() {
         LOG.info("Called permissionsMock");
         Set<String> permissions = new HashSet<>();
-        permissions.add("administration_READ_animal");
-        permissions.add("administration_READ_keeper");
-        permissions.add("administration_READ_enclosure");
-        permissions.add("administration_WRITE_animal");
-        permissions.add("administration_WRITE_enclosure");
-        permissions.add("administration_WRITE_keeper");
-        permissions.add("administration_DELETE_animal");
-        permissions.add("administration_DELETE_enclosure");
-        permissions.add("administration_DELETE_keeper");
-        permissions.add("administration_BUSINESSACTION_createAppointment");
+        permissions.add("administration_READ_Animal");
+        permissions.add("administration_READ_Keeper");
+        permissions.add("administration_READ_Enclosure");
+        permissions.add("administration_WRITE_Animal");
+        permissions.add("administration_WRITE_Enclosure");
+        permissions.add("administration_WRITE_Keeper");
+        permissions.add("administration_DELETE_Animal");
+        permissions.add("administration_DELETE_Enclosure");
+        permissions.add("administration_DELETE_Keeper");
+        permissions.add("administration_BUSINESSACTION_CreateAppointment");
         permissions.add("keeperinterface_GUI_keepers");
         permissions.add("keeperinterface_GUI_animals");
         permissions.add("keeperinterface_GUI_enclosures");
