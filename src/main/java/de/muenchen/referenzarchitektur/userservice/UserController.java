@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.logging.Logger;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.rest.webmvc.RepositoryLinksResource;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.ResourceProcessor;
+import org.springframework.hateoas.ResourceSupport;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,7 +25,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @RestController
 @Profile("!no-security")
-public class UserController {
+@RequestMapping(value = "/permissions")
+public class UserController implements ResourceProcessor<RepositoryLinksResource> {
 
     private final EntitlementsService entitlementsService;
 
@@ -32,7 +36,26 @@ public class UserController {
         this.entitlementsService = entitlementsService;
     }
 
-    @RequestMapping(value = "/permissions", method = RequestMethod.GET)
+    class LinksResource extends ResourceSupport {
+
+        public LinksResource() {
+        }
+    }
+
+    /**
+     * This method adds the link to /businessActions to the REST-startpoint.
+     *
+     * @param repositoryLinksResource
+     * @return
+     */
+    @Override
+    public RepositoryLinksResource process(RepositoryLinksResource repositoryLinksResource) {
+        repositoryLinksResource.add(linkTo(UserController.class).withRel("permissions"));
+        return repositoryLinksResource;
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+//    @RequestMapping(value = "/permissions", method = RequestMethod.GET)
     public ResponseEntity<PermissionsResource> getPermissions() {
         Set<String> permissions = entitlementsService.getPermissions(false);
         return generatePermissionsResponse(permissions, "permissions");
